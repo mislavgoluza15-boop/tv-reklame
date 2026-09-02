@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>TV Reklame</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: Arial, sans-serif;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide1 {
+      background: linear-gradient(135deg, #050505, #242424);
+      color: white;
+    }
+
+    .slide2 {
+      background: white;
+      color: #111;
+    }
+
+    .slide3 {
+      background: linear-gradient(135deg, #111, #333);
+      color: white;
+    }
+
+    h1 {
+      font-size: 7vw;
+      margin: 0;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 3vw;
+      font-weight: normal;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .brand {
+      font-size: 2vw;
+      letter-spacing: 8px;
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="slide slide1 active">
+    <div class="brand">WATTLUX</div>
+    <h1>MODERNA LED RASVJETA</h1>
+    <h2>Snaga. Dizajn. Učinkovitost.</h2>
+  </div>
+
+  <div class="slide slide2">
+    <div class="brand">WATTLUX</div>
+    <h1>LED PANELI</h1>
+    <h2>Moderno rješenje za svaki prostor</h2>
+  </div>
+
+  <div class="slide slide3">
+    <div class="brand">WATTLUX</div>
+    <h1>OSVIJETLITE PROSTOR</h1>
+    <h2>WATTLUX LED rasvjeta</h2>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    setInterval(() => {
+      slides[current].classList.remove('active');
+
+      current = (current + 1) % slides.length;
+
+      slides[current].classList.add('active');
+    }, 8000);
+  </script>
+
+</body>
+</html>
