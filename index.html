@@ -4,8 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kontrola proizvoda</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       margin: 0;
       width: 100%;
@@ -33,7 +37,7 @@
       object-fit: contain;
       opacity: 0;
       transform: scale(1.01);
-      transition: opacity .9s ease, transform 1.2s ease;
+      transition: opacity 0.9s ease, transform 1.2s ease;
       user-select: none;
       -webkit-user-drag: none;
     }
@@ -54,18 +58,21 @@
       gap: 10px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(20, 20, 20, .45);
+      background: rgba(20, 20, 20, 0.45);
       backdrop-filter: blur(8px);
       z-index: 20;
-      transition: opacity .25s ease;
+      transition: opacity 0.25s ease;
     }
 
-    .controls.hide { opacity: 0; pointer-events: none; }
+    .controls.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
 
     button {
       border: 0;
       color: white;
-      background: rgba(255,255,255,.12);
+      background: rgba(255, 255, 255, 0.12);
       border-radius: 50%;
       width: 36px;
       height: 36px;
@@ -73,7 +80,9 @@
       font-size: 18px;
     }
 
-    button:hover { background: rgba(255,255,255,.22); }
+    button:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
 
     .counter {
       color: white;
@@ -91,121 +100,459 @@
       width: 0%;
       background: #21255b;
       z-index: 30;
-      transition: width .25s linear;
     }
 
     @media (max-width: 700px) {
       .controls {
         bottom: 10px;
-        transform: translateX(-50%) scale(.92);
+        transform: translateX(-50%) scale(0.92);
       }
     }
   </style>
 </head>
+
 <body>
 
-<div class="presentation" id="presentation">
-  <img class="slide active" src="slides/slide-01.png" alt="Slajd 1" loading="eager"><img class="slide" src="slides/slide-02.png" alt="Slajd 2" loading="eager"><img class="slide" src="slides/slide-03.png" alt="Slajd 3" loading="lazy"><img class="slide" src="slides/slide-04.png" alt="Slajd 4" loading="lazy"><img class="slide" src="slides/slide-05.png" alt="Slajd 5" loading="lazy"><img class="slide" src="slides/slide-06.png" alt="Slajd 6" loading="lazy"><img class="slide" src="slides/slide-07.png" alt="Slajd 7" loading="lazy"><img class="slide" src="slides/slide-08.png" alt="Slajd 8" loading="lazy"><img class="slide" src="slides/slide-09.png" alt="Slajd 9" loading="lazy"><img class="slide" src="slides/slide-10.png" alt="Slajd 10" loading="lazy"><img class="slide" src="slides/slide-11.png" alt="Slajd 11" loading="lazy"><img class="slide" src="slides/slide-12.png" alt="Slajd 12" loading="lazy"><img class="slide" src="slides/slide-13.png" alt="Slajd 13" loading="lazy"><img class="slide" src="slides/slide-14.png" alt="Slajd 14" loading="lazy"><img class="slide" src="slides/slide-15.png" alt="Slajd 15" loading="lazy">
-</div>
+  <div class="presentation" id="presentation">
 
-<div class="controls" id="controls">
-  <button id="prev" aria-label="Prethodni slajd">‹</button>
-  <button id="pause" aria-label="Pauza">Ⅱ</button>
-  <span class="counter"><span id="current">1</span> / 15</span>
-  <button id="next" aria-label="Sljedeći slajd">›</button>
-  <button id="fullscreen" aria-label="Cijeli ekran">⛶</button>
-</div>
+    <img
+      class="slide active"
+      src="slide-01.png"
+      alt="Slajd 1"
+      loading="eager"
+    >
 
-<div class="progress" id="progress"></div>
+    <img
+      class="slide"
+      src="slide-02.png"
+      alt="Slajd 2"
+      loading="eager"
+    >
 
-<script>
-  const slides = [...document.querySelectorAll('.slide')];
-  const currentEl = document.getElementById('current');
-  const pauseBtn = document.getElementById('pause');
-  const controls = document.getElementById('controls');
-  const progress = document.getElementById('progress');
+    <img
+      class="slide"
+      src="slide-03.png"
+      alt="Slajd 3"
+      loading="lazy"
+    >
 
-  let index = 0;
-  let playing = true;
-  const interval = 6500; // vrijeme prikaza svakog slajda u ms
-  let timer;
-  let startedAt = Date.now();
-  let progressRAF;
+    <img
+      class="slide"
+      src="slide-04.png"
+      alt="Slajd 4"
+      loading="lazy"
+    >
 
-  function showSlide(i) {
-    slides[index].classList.remove('active');
-    index = (i + slides.length) % slides.length;
-    slides[index].classList.add('active');
-    currentEl.textContent = index + 1;
-    restartTimer();
-  }
+    <img
+      class="slide"
+      src="slide-05.png"
+      alt="Slajd 5"
+      loading="lazy"
+    >
 
-  function nextSlide() { showSlide(index + 1); }
-  function prevSlide() { showSlide(index - 1); }
+    <img
+      class="slide"
+      src="slide-06.png"
+      alt="Slajd 6"
+      loading="lazy"
+    >
 
-  function startTimer() {
-    clearTimeout(timer);
-    cancelAnimationFrame(progressRAF);
-    startedAt = Date.now();
-    if (playing) {
-      timer = setTimeout(nextSlide, interval);
-      animateProgress();
-    } else {
-      progress.style.width = '0%';
+    <img
+      class="slide"
+      src="slide-07.png"
+      alt="Slajd 7"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-08.png"
+      alt="Slajd 8"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-09.png"
+      alt="Slajd 9"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-10.png"
+      alt="Slajd 10"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-11.png"
+      alt="Slajd 11"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-12.png"
+      alt="Slajd 12"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-13.png"
+      alt="Slajd 13"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-14.png"
+      alt="Slajd 14"
+      loading="lazy"
+    >
+
+    <img
+      class="slide"
+      src="slide-15.png"
+      alt="Slajd 15"
+      loading="lazy"
+    >
+
+  </div>
+
+
+  <div class="controls" id="controls">
+
+    <button id="prev" aria-label="Prethodni slajd">
+      ‹
+    </button>
+
+    <button id="pause" aria-label="Pauza">
+      Ⅱ
+    </button>
+
+    <span class="counter">
+      <span id="current">1</span> / 15
+    </span>
+
+    <button id="next" aria-label="Sljedeći slajd">
+      ›
+    </button>
+
+    <button id="fullscreen" aria-label="Cijeli ekran">
+      ⛶
+    </button>
+
+  </div>
+
+
+  <div class="progress" id="progress"></div>
+
+
+  <script>
+
+    const slides = [...document.querySelectorAll('.slide')];
+
+    const currentEl =
+      document.getElementById('current');
+
+    const pauseBtn =
+      document.getElementById('pause');
+
+    const controls =
+      document.getElementById('controls');
+
+    const progress =
+      document.getElementById('progress');
+
+
+    let index = 0;
+
+    let playing = true;
+
+    /*
+      VRIJEME TRAJANJA SLAJDA
+
+      6500 = 6.5 sekundi
+
+      Ako želiš 10 sekundi:
+      10000
+    */
+
+    const interval = 6500;
+
+    let timer;
+
+    let startedAt = Date.now();
+
+    let progressRAF;
+
+
+    function showSlide(i) {
+
+      slides[index].classList.remove('active');
+
+      index =
+        (i + slides.length) % slides.length;
+
+      slides[index].classList.add('active');
+
+      currentEl.textContent =
+        index + 1;
+
+      restartTimer();
+
     }
-  }
 
-  function restartTimer() { startTimer(); }
 
-  function animateProgress() {
-    const tick = () => {
-      if (!playing) return;
-      const elapsed = Date.now() - startedAt;
-      progress.style.width = Math.min(100, elapsed / interval * 100) + '%';
-      if (elapsed < interval) progressRAF = requestAnimationFrame(tick);
-    };
-    tick();
-  }
+    function nextSlide() {
 
-  document.getElementById('next').addEventListener('click', nextSlide);
-  document.getElementById('prev').addEventListener('click', prevSlide);
+      showSlide(index + 1);
 
-  pauseBtn.addEventListener('click', () => {
-    playing = !playing;
-    pauseBtn.textContent = playing ? 'Ⅱ' : '▶';
-    startTimer();
-  });
+    }
 
-  document.getElementById('fullscreen').addEventListener('click', async () => {
-    try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen();
-      } else {
-        await document.exitFullscreen();
+
+    function prevSlide() {
+
+      showSlide(index - 1);
+
+    }
+
+
+    function startTimer() {
+
+      clearTimeout(timer);
+
+      cancelAnimationFrame(progressRAF);
+
+      startedAt = Date.now();
+
+      progress.style.width = '0%';
+
+
+      if (playing) {
+
+        timer =
+          setTimeout(nextSlide, interval);
+
+        animateProgress();
+
       }
-    } catch (e) {}
-  });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
-    if (e.key === 'ArrowLeft') prevSlide();
-    if (e.key.toLowerCase() === 'p') pauseBtn.click();
-    if (e.key.toLowerCase() === 'f') document.getElementById('fullscreen').click();
-  });
+    }
 
-  let hideControlsTimer;
-  function revealControls() {
-    controls.classList.remove('hide');
-    clearTimeout(hideControlsTimer);
-    hideControlsTimer = setTimeout(() => controls.classList.add('hide'), 2500);
-  }
 
-  document.addEventListener('mousemove', revealControls);
-  document.addEventListener('touchstart', revealControls, {passive:true});
-  revealControls();
+    function restartTimer() {
 
-  startTimer();
-</script>
+      startTimer();
+
+    }
+
+
+    function animateProgress() {
+
+      const tick = () => {
+
+        if (!playing) return;
+
+
+        const elapsed =
+          Date.now() - startedAt;
+
+
+        const percentage =
+          Math.min(
+            100,
+            elapsed / interval * 100
+          );
+
+
+        progress.style.width =
+          percentage + '%';
+
+
+        if (elapsed < interval) {
+
+          progressRAF =
+            requestAnimationFrame(tick);
+
+        }
+
+      };
+
+
+      tick();
+
+    }
+
+
+    document
+      .getElementById('next')
+      .addEventListener(
+        'click',
+        nextSlide
+      );
+
+
+    document
+      .getElementById('prev')
+      .addEventListener(
+        'click',
+        prevSlide
+      );
+
+
+    pauseBtn.addEventListener(
+      'click',
+      () => {
+
+        playing = !playing;
+
+        pauseBtn.textContent =
+          playing ? 'Ⅱ' : '▶';
+
+        startTimer();
+
+      }
+    );
+
+
+    document
+      .getElementById('fullscreen')
+      .addEventListener(
+        'click',
+        async () => {
+
+          try {
+
+            if (
+              !document.fullscreenElement
+            ) {
+
+              await document
+                .documentElement
+                .requestFullscreen();
+
+            } else {
+
+              await document
+                .exitFullscreen();
+
+            }
+
+          } catch (e) {}
+
+        }
+      );
+
+
+    /*
+      TIPKOVNICA
+
+      → sljedeći
+      ← prethodni
+      SPACE sljedeći
+      P pauza
+      F fullscreen
+    */
+
+    document.addEventListener(
+      'keydown',
+      (e) => {
+
+        if (
+          e.key === 'ArrowRight' ||
+          e.key === ' '
+        ) {
+
+          nextSlide();
+
+        }
+
+
+        if (
+          e.key === 'ArrowLeft'
+        ) {
+
+          prevSlide();
+
+        }
+
+
+        if (
+          e.key.toLowerCase() === 'p'
+        ) {
+
+          pauseBtn.click();
+
+        }
+
+
+        if (
+          e.key.toLowerCase() === 'f'
+        ) {
+
+          document
+            .getElementById('fullscreen')
+            .click();
+
+        }
+
+      }
+    );
+
+
+    /*
+      AUTOMATSKO SKRIVANJE KONTROLA
+    */
+
+    let hideControlsTimer;
+
+
+    function revealControls() {
+
+      controls
+        .classList
+        .remove('hide');
+
+
+      clearTimeout(
+        hideControlsTimer
+      );
+
+
+      hideControlsTimer =
+        setTimeout(
+          () =>
+            controls
+              .classList
+              .add('hide'),
+          2500
+        );
+
+    }
+
+
+    document.addEventListener(
+      'mousemove',
+      revealControls
+    );
+
+
+    document.addEventListener(
+      'touchstart',
+      revealControls,
+      { passive: true }
+    );
+
+
+    revealControls();
+
+    startTimer();
+
+  </script>
 
 </body>
 </html>
