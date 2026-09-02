@@ -1,187 +1,211 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#11163e">
-<title>DOZATOR REKLAMACIJA · LOT BE2600645</title>
-<style>
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-    font-family: Arial, Helvetica, sans-serif;
-    cursor: none;
-  }
-  #player {
-    position: fixed;
-    inset: 0;
-    background: #000;
-  }
-  .slide {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    opacity: 0;
-    transform: scale(1.005);
-    transition: opacity .65s ease, transform 1.2s ease;
-    pointer-events: none;
-  }
-  .slide.active {
-    opacity: 1;
-    transform: scale(1);
-    pointer-events: auto;
-  }
-  .slide img {
-    width: 100vw;
-    height: 100vh;
-    object-fit: contain;
-    display: block;
-    user-select: none;
-    -webkit-user-drag: none;
-  }
-  #progress {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    height: 3px;
-    width: 0%;
-    background: rgba(255,255,255,.75);
-    z-index: 10;
-    opacity: .45;
-  }
-  #hint {
-    position: fixed;
-    right: 22px;
-    top: 18px;
-    z-index: 20;
-    color: white;
-    background: rgba(0,0,0,.55);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 8px;
-    padding: 9px 12px;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity .25s ease;
-    pointer-events: none;
-  }
-  body.show-ui { cursor: default; }
-  body.show-ui #hint { opacity: 1; }
-  @media (max-width: 700px) {
-    #hint { font-size: 12px; right: 10px; top: 10px; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kontrola proizvoda</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #f3f3f3;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .presentation {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f3f3;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transform: scale(1.01);
+      transition: opacity .9s ease, transform 1.2s ease;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 2;
+    }
+
+    .controls {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(20, 20, 20, .45);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+      transition: opacity .25s ease;
+    }
+
+    .controls.hide { opacity: 0; pointer-events: none; }
+
+    button {
+      border: 0;
+      color: white;
+      background: rgba(255,255,255,.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    button:hover { background: rgba(255,255,255,.22); }
+
+    .counter {
+      color: white;
+      min-width: 58px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      height: 4px;
+      width: 0%;
+      background: #21255b;
+      z-index: 30;
+      transition: width .25s linear;
+    }
+
+    @media (max-width: 700px) {
+      .controls {
+        bottom: 10px;
+        transform: translateX(-50%) scale(.92);
+      }
+    }
+  </style>
 </head>
 <body>
-<div id="player">
-    <div class="slide active"><img src="slide-1.jpg" alt="Slide 1"></div>
-    <div class="slide"><img src="slide-2.jpg" alt="Slide 2"></div>
-    <div class="slide"><img src="slide-3.jpg" alt="Slide 3"></div>
-    <div class="slide"><img src="slide-4.jpg" alt="Slide 4"></div>
-    <div class="slide"><img src="slide-5.jpg" alt="Slide 5"></div>
-    <div class="slide"><img src="slide-6.jpg" alt="Slide 6"></div>
-    <div class="slide"><img src="slide-7.jpg" alt="Slide 7"></div>
-    <div class="slide"><img src="slide-8.jpg" alt="Slide 8"></div>
-    <div class="slide"><img src="slide-9.jpg" alt="Slide 9"></div>
+
+<div class="presentation" id="presentation">
+  <img class="slide active" src="slides/slide-01.png" alt="Slajd 1" loading="eager"><img class="slide" src="slides/slide-02.png" alt="Slajd 2" loading="eager"><img class="slide" src="slides/slide-03.png" alt="Slajd 3" loading="lazy"><img class="slide" src="slides/slide-04.png" alt="Slajd 4" loading="lazy"><img class="slide" src="slides/slide-05.png" alt="Slajd 5" loading="lazy"><img class="slide" src="slides/slide-06.png" alt="Slajd 6" loading="lazy"><img class="slide" src="slides/slide-07.png" alt="Slajd 7" loading="lazy"><img class="slide" src="slides/slide-08.png" alt="Slajd 8" loading="lazy"><img class="slide" src="slides/slide-09.png" alt="Slajd 9" loading="lazy"><img class="slide" src="slides/slide-10.png" alt="Slajd 10" loading="lazy"><img class="slide" src="slides/slide-11.png" alt="Slajd 11" loading="lazy"><img class="slide" src="slides/slide-12.png" alt="Slajd 12" loading="lazy"><img class="slide" src="slides/slide-13.png" alt="Slajd 13" loading="lazy"><img class="slide" src="slides/slide-14.png" alt="Slajd 14" loading="lazy"><img class="slide" src="slides/slide-15.png" alt="Slajd 15" loading="lazy">
 </div>
-<div id="progress"></div>
-<div id="hint">← → promjena · Space pauza · F fullscreen</div>
+
+<div class="controls" id="controls">
+  <button id="prev" aria-label="Prethodni slajd">‹</button>
+  <button id="pause" aria-label="Pauza">Ⅱ</button>
+  <span class="counter"><span id="current">1</span> / 15</span>
+  <button id="next" aria-label="Sljedeći slajd">›</button>
+  <button id="fullscreen" aria-label="Cijeli ekran">⛶</button>
+</div>
+
+<div class="progress" id="progress"></div>
 
 <script>
-(() => {
   const slides = [...document.querySelectorAll('.slide')];
+  const currentEl = document.getElementById('current');
+  const pauseBtn = document.getElementById('pause');
+  const controls = document.getElementById('controls');
   const progress = document.getElementById('progress');
-  const intervalMs = 8000;
-  let current = 0;
-  let paused = false;
-  let timer = null;
-  let progressStart = performance.now();
-  let remaining = intervalMs;
-  let uiTimer;
 
-  function show(index) {
-    slides[current].classList.remove('active');
-    current = (index + slides.length) % slides.length;
-    slides[current].classList.add('active');
+  let index = 0;
+  let playing = true;
+  const interval = 6500; // vrijeme prikaza svakog slajda u ms
+  let timer;
+  let startedAt = Date.now();
+  let progressRAF;
+
+  function showSlide(i) {
+    slides[index].classList.remove('active');
+    index = (i + slides.length) % slides.length;
+    slides[index].classList.add('active');
+    currentEl.textContent = index + 1;
     restartTimer();
   }
 
-  function next() { show(current + 1); }
-  function prev() { show(current - 1); }
+  function nextSlide() { showSlide(index + 1); }
+  function prevSlide() { showSlide(index - 1); }
 
-  function restartTimer() {
+  function startTimer() {
     clearTimeout(timer);
-    remaining = intervalMs;
-    progressStart = performance.now();
-    if (!paused) timer = setTimeout(next, intervalMs);
-  }
-
-  function togglePause() {
-    paused = !paused;
-    if (paused) {
-      clearTimeout(timer);
-      remaining = Math.max(0, remaining - (performance.now() - progressStart));
+    cancelAnimationFrame(progressRAF);
+    startedAt = Date.now();
+    if (playing) {
+      timer = setTimeout(nextSlide, interval);
+      animateProgress();
     } else {
-      progressStart = performance.now();
-      timer = setTimeout(next, remaining || intervalMs);
+      progress.style.width = '0%';
     }
   }
 
-  async function fullscreen() {
+  function restartTimer() { startTimer(); }
+
+  function animateProgress() {
+    const tick = () => {
+      if (!playing) return;
+      const elapsed = Date.now() - startedAt;
+      progress.style.width = Math.min(100, elapsed / interval * 100) + '%';
+      if (elapsed < interval) progressRAF = requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  document.getElementById('next').addEventListener('click', nextSlide);
+  document.getElementById('prev').addEventListener('click', prevSlide);
+
+  pauseBtn.addEventListener('click', () => {
+    playing = !playing;
+    pauseBtn.textContent = playing ? 'Ⅱ' : '▶';
+    startTimer();
+  });
+
+  document.getElementById('fullscreen').addEventListener('click', async () => {
     try {
       if (!document.fullscreenElement) {
         await document.documentElement.requestFullscreen();
       } else {
         await document.exitFullscreen();
       }
-    } catch (_) {}
+    } catch (e) {}
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+    if (e.key.toLowerCase() === 'p') pauseBtn.click();
+    if (e.key.toLowerCase() === 'f') document.getElementById('fullscreen').click();
+  });
+
+  let hideControlsTimer;
+  function revealControls() {
+    controls.classList.remove('hide');
+    clearTimeout(hideControlsTimer);
+    hideControlsTimer = setTimeout(() => controls.classList.add('hide'), 2500);
   }
 
-  function animateProgress(now) {
-    if (!paused) {
-      const elapsed = now - progressStart;
-      const duration = remaining || intervalMs;
-      const pct = Math.min(100, Math.max(0, elapsed / duration * 100));
-      progress.style.width = pct + '%';
-    }
-    requestAnimationFrame(animateProgress);
-  }
+  document.addEventListener('mousemove', revealControls);
+  document.addEventListener('touchstart', revealControls, {passive:true});
+  revealControls();
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'PageDown') next();
-    if (e.key === 'ArrowLeft' || e.key === 'PageUp') prev();
-    if (e.key === ' ' || e.key === 'Spacebar') {
-      e.preventDefault();
-      togglePause();
-    }
-    if (e.key.toLowerCase() === 'f') fullscreen();
-  });
-
-  document.addEventListener('click', e => {
-    const x = e.clientX / innerWidth;
-    if (x < .25) prev();
-    else if (x > .75) next();
-    else fullscreen();
-  });
-
-  document.addEventListener('mousemove', () => {
-    document.body.classList.add('show-ui');
-    clearTimeout(uiTimer);
-    uiTimer = setTimeout(() => document.body.classList.remove('show-ui'), 1800);
-  });
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) clearTimeout(timer);
-    else restartTimer();
-  });
-
-  restartTimer();
-  requestAnimationFrame(animateProgress);
-})();
+  startTimer();
 </script>
+
 </body>
 </html>
